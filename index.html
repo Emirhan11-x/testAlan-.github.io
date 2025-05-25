@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yetki Kontrol - Siyah Tema</title>
+  <style>
+    /* Temel reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #121212;
+      color: #eee;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .login-container {
+      background-color: #1e1e1e;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+      width: 320px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 24px;
+      color: #bb86fc;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      border: 1.5px solid #333;
+      background-color: #292929;
+      color: #eee;
+      font-size: 16px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #bb86fc;
+      box-shadow: 0 0 8px #bb86fc;
+      background-color: #1f1f1f;
+    }
+
+    button {
+      width: 100%;
+  padding: 12px 0;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: 600;
+
+  background: linear-gradient(270deg, #bb86fc, #3700b3, #bb86fc);
+  background-size: 600% 600%;
+  animation: gradientAnimation 16s ease infinite;
+  transition: background-position 0.4s ease-in-out;
+    }
+
+    button:hover {
+      animation-play-state: paused;
+  background-position: 100% 50%;
+    }
+    @keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+    label {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #aaa;
+      min-height: 18px; /* input altındaki label alanı için */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Yetki Girişi</h2>
+
+    <input type="text" id="YetkiTipi" placeholder="Yetki Tipinizi Girin" />
+    <label id="kullaniciAdi"></label>
+
+    <input type="text" id="Sifre" placeholder="Yetki Şifresini Girin" />
+    <label id="kullaniciSifre"></label>
+
+    <button onclick="Kontrol()">Giriş</button>
+  </div>
+
+  <script>
+  function Kontrol() {
+    var kullanici = document.getElementById("YetkiTipi").value;
+    var sifre = document.getElementById("Sifre").value;
+
+    // Admin kontrolü
+    if (kullanici === "Admin" && sifre === "Luna82x") {
+      window.location.href = "AdminPanel.html";
+      return;
+    }
+
+    // User kontrolü
+    var userlar = ["User1881", "Edanur"];
+    var dogruSifreler = ["Ruhi123", "1938", "Kılıç"];
+    if (userlar.includes(kullanici) && dogruSifreler.includes(sifre)) {
+      window.location.href = "UserPanel.html";
+      return;
+    }else{
+    alert("Hatalı kullanıcı adı veya şifre!");
+    }
+  }
+</script>
+</body>
+</html>
