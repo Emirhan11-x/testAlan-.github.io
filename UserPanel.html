@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VisualSpace</title>
+  <style>
+    body {
+      background: #171717;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      color: #eee;
+      box-shadow: 0 0 40px 0 rgba(255, 255, 255, 0.18) inset;
+      min-height: 100vh;
+    }
+
+    #ustCubuk {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e1e1e;
+      padding: 16px 32px;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+
+    #ustCubuk button {
+      background:  #1e1e1e;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-right: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #ustCubuk button:hover {
+      background: #2a2a2a;
+    }
+
+    #AramaCubugu {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 220px;
+      margin-left: 16px;
+    }
+
+    .liste {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      justify-items: center;
+      padding: 40px 0;
+    }
+
+    @media (max-width: 700px) {
+      .liste {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 24px 0;
+      }
+    }
+
+    .kutucuk {
+      background: #1e1e1e;
+      border-radius: 60px;
+      box-shadow: 0 4px 16px rgb(0, 0, 0);
+      padding: 32px 36px 24px 36px;
+      width: 500px;
+      max-width: 98vw;
+      min-height: 260px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      position: relative;
+      margin-bottom: 0;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+
+    .kutucuk:hover {
+      box-shadow: 0 12px 32px rgb(163, 45, 45);
+      transform: translateY(-10px) scale(1.03);
+    }
+
+    .kutucuk .sol {
+      flex: 0 0 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 32px;
+      justify-content: center;
+    }
+
+    .kutucuk img {
+      width: 120px;
+      height: 180px;
+      object-fit: cover;
+      border: 4px solid none;
+      border-radius: 4px;
+      background: #eee;
+      margin-bottom: 8px;
+      margin-top: 8px;
+      margin-left: 8px;
+      display: block;
+    }
+
+    .kutucuk .ad {
+      margin-top: 12px;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 0;
+      margin-left: 0;
+      width: 100%;
+      display: block;
+    }
+
+    .kutucuk .sag {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      margin-top: 8px;
+      align-items: flex-start;
+    }
+
+    .kutucuk .ozellik {
+      font-size: 1.08rem;
+      color: #ffffff;
+      margin-top: 12px;
+      margin-bottom: 32px;
+      font-weight: 400;
+      text-align: left;
+      word-break: break-word;
+      white-space: pre-line;
+      width: 100%;
+    }
+
+    .kutucuk .ozellik:last-child {
+      margin-bottom: 0;
+    }
+
+    .kutucuk .ozellik span {
+      font-weight: 600;
+      color: #ffffff;
+      margin-right: 4px;
+    }
+
+    @media (max-width: 700px) {
+      #ustCubuk {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 8px;
+        border-radius: 0 0 8px 8px;
+      }
+      #AramaCubugu {
+        order: 1;
+        width: 100%;
+        margin: 0 0 10px 0;
+      }
+      #ustCubuk button:nth-of-type(1) {
+        order: 2;
+        width: 100%;
+        margin: 0 0 10px 0;
+      }
+      #ustCubuk button:nth-of-type(2) {
+        order: 3;
+        width: 100%;
+        margin: 0 0 10px 0;
+      }
+      #Arama {
+        order: 4;
+      }
+      .kutucuk {
+        flex-direction: column;
+        align-items: center;
+        padding: 24px 10px 18px 10px;
+        border-radius: 32px;
+        min-height: unset;
+      }
+      .kutucuk .sol {
+        margin-right: 0;
+        margin-bottom: 12px;
+        align-items: center;
+      }
+      .kutucuk .ad {
+        text-align: center;
+        margin-left: 0;
+      }
+      .kutucuk .sag {
+        align-items: center;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="ustCubuk">
+    <button onclick="FilmGöster()">Film</button>
+    <button onclick="DiziGöster()">Dizi</button>
+    <input type="text" id="AramaCubugu" placeholder="🔎Arama yapın...">
+    <label id="Arama"></label>
+  </div>
+
+  <div id="Dizi" class="liste"></div>
+  <div id="Film" class="liste"></div>
+
+  <script>
+    // ÖRNEK VERİLER
+      var filmler = [
+    {
+      konu: "George Lucas tarafından yaratılan ve 1977'de başlayan bir bilim kurgu evrenidir. Galaksiler arası savaşları, Jedi ve Sith'lerin mücadelesini, İmparatorluk ve Direniş arasındaki çatışmaları konu alır. Zengin karakterleri ve derin mitolojisiyle sinema tarihinin en etkileyici serilerinden biri olmuştur(Film ve Dizilerden oluşur.)",
+      ad: "Star Wars",
+      tür: "Film",
+      puan: "7.5",
+      url: "https://images.justwatch.com/poster/265831000/s332/star-wars-skywalkerin-yukselisi",
+      webURL: "https://www.google.com/search?sca_esv=768393473445289f&sxsrf=AE3TifNZvsrT3KntQBS5ANvCzcA6tKrWxw:1748358831497&q=star+wars+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmPgfe_7ak8LUsonpWCvT6w65kX8H6mRWnnD519MpbjPF8WRgd7YKfCo_79r0Eq9luN4TKGXMkXOa7EYLk-9JXZtRjA4g3DLf4QKNCCDwK7or_D7OOJFDW2rISy1wWqSRh3E9Op4zTgMTfnvgV2580fk-H-_IQ&sa=X&ved=2ahUKEwjroN2Y-MONAxVzQ_EDHW7LNZkQ0pQJegQIEhAB&biw=767&bih=826&dpr=1.25"
+    },
+    {
+  "ad": "Truman Show",
+  "tur": "Film",
+  "puan": "8.2",
+  "konu": "Bir sigorta satıcısı, tüm hayatının aslında bir tür reality şov olduğundan şüphelenmeye başlar.",
+  "webURL": "https://www.google.com/search?q=truman+show+izle&sca_esv=8f2d608cc335416a&sxsrf=AE3TifOKVkCWukM3vxKiYRwsI3k1tDpL3g%3A1748623338228&ei=6t85aNfhDbmi1fIP9_DGgQo&oq=truman+show+&gs_lp=Egxnd3Mtd2l6LXNlcnAaAhgDIgx0cnVtYW4gc2hvdyAqAggAMgoQIxiABBgnGIoFMgsQABiABBjLARiLAzILEAAYgAQYywEYiwMyCxAAGIAEGMsBGIsDMgsQABiABBjLARiLAzIKEC4YgAQYQxiKBTINEAAYgAQYQxiKBRiLAzILEAAYgAQYywEYiwMyCxAAGIAEGMsBGIsDMgsQABiABBjLARiLA0i_O1CqBFjoEXAFeAGQAQCYAa4BoAGKBaoBAzAuNLgBAcgBAPgBAZgCCaACqwXCAgoQABiwAxjWBBhHwgINEC4YgAQYsAMYQxiKBcICDRAAGIAEGLADGEMYigXCAhMQLhiABBiwAxhDGMgDGIoF2AEBwgIIEAAYgAQYywHCAgYQABgWGB7CAggQABiABBiiBMICBRAAGO8FmAMAiAYBkAYKugYECAEYCJIHAzUuNKAHgxayBwMwLjS4B5gFwgcFMC4zLjbIBxw&sclient=gws-wiz-serp",
+  "url": "https://m.media-amazon.com/images/S/pv-target-images/54f8257131ab5b1f30155eae60b0d7af7622de9820d14ca226c6ab6d2dec7cac.jpg"
+},
+{
+  "ad": "Better Days",
+  "tur": "Film",
+  "puan": "7.6",
+  "konu": "Final sınavlarının baskısıyla başa çıkmaya çalışan genç bir kız, onu saldırganlarından koruyan gizemli bir genç adamla beklenmedik bir arkadaşlık kurar.",
+  "webURL": "https://www.google.com/search?sca_esv=8f2d608cc335416a&sxsrf=AE3TifPtEDD9EHWulqopwyj3p-qP5pMelg:1748623633977&q=better+days+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmPgfe_7ak8LUsonpWCvT6w65kX8H6mRWnnD519MpbjPF8WRgd7YKfCo_79r0Eq9luN4TKGXMkXOa7EYLk-9JXZtRjA4g3DLf4QKNCCDwK7or_D7OOJFDW2rISy1wWqSRh3E9Op4zTgMTfnvgV2580fk-H-_IQ&sa=X&ved=2ahUKEwiUgLLU0suNAxULbvEDHQPoElAQ0pQJegQIDBAB",
+  "url": "https://wellgousa.com/sites/default/files/2023-03/BetterDays-CriminalChineseRomanceDrama-WellGoUSA-KeyArtPoster-812x1200.jpg"
+},
+    {
+      konu: "Bir matematik dâhisi yeni bir müşteri için hesapları karıştırırken, Maliye Bakanlığı onun faaliyetlerini kontrol altına alır ve ceset sayısı artmaya başlar.",
+      ad: "The Accountant",
+      tür: "Film",
+      puan: "7.3",
+      url: "https://m.media-amazon.com/images/S/pv-target-images/fcccb33c01e74615f3dcf60d7ef99181f53824c8857d1767388f825386459ed3.jpg",
+      webURL: "https://www.google.com/search?sca_esv=768393473445289f&sxsrf=AE3TifOAc4Z_fMFtA6jpfIiqdNGfXLAjfw:1748359083063&q=the+accountant+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIekvkPKxAnJVek4Gm3Ko47EpIAt7vYW7pRXMogQd1EJqJdvc9k1tyx9EG16hHXDK24u__dDmYsDTyF0jimbEl4_GSJqLwhV0uNBbNCJhEElOKXrbkCTDzfXvaYxdrlETBWzPAmJMb3_5mNPI8NtvGjnZeOIoZ_qdwk7muMl9mt2IiA46E3g&sa=X&ved=2ahUKEwiEy9eQ-cONAxUvR_EDHSZpGzoQ0pQJegQIDxAB&biw=767&bih=826&dpr=1.25"
+    },
+    {
+      konu: "Sorunlu bir güvenlik görevlisi Freddy Fazbear's Pizza'da çalışmaya başlar. Beş gecelik işteyken, pizzacıda bir sorun olduğunu fark eder ve çok geçmeden animatronikleri hakkındaki gerçeği bulur.",
+      ad: "Five Nights at Freddy's",
+      tür: "Film",
+      puan: "5.4",
+      url: "https://m.media-amazon.com/images/I/61iJ2YmredL.jpg",
+      webURL: "https://www.google.com/search?sca_esv=768393473445289f&sxsrf=AE3TifPEgxiO86HeVsScGZm514PRemuGRQ:1748359244603&q=fnaf+filmi+%C4%B0zle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmPgfe_7ak8LUsonpWCvT6w65kX8H6mRWnnD519MpbjPF8WRgd7YKfCo_79r0Eq9luN4TKGXMkXOa7EYLk-9JXZtRjA4g3DLf4QKNCCDwK7or_D7OOJFDW2rISy1wWqSRh3E9Op4zTgMTfnvgV2580fk-H-_IQ&sa=X&ved=2ahUKEwjHodvd-cONAxVlcPEDHVRYCKEQ0pQJegQIFRAB&biw=767&bih=826&dpr=1.25"
+    },
+     {
+      konu: "Yerel bir bilim insanı, gökyüzünden yiyecek düşürebilen bir makine icat edene kadar genellikle başarısız olarak kabul edilir. Ancak işlerin kötüye gitmek üzere olduğunu pek bilmez.",
+      ad: "Köfte Yağmuru",
+      tür: "Film",
+      puan: "7.0",
+      webURL:  "https://www.google.com/search?q=k%C3%B6fte+ya%C4%9Fmuru+izle&sca_esv=768393473445289f&sxsrf=AE3TifOiD7fvrppvOqkeqE2SXcMUoUUbNg%3A1748357277450&ei=ndA1aPKaG5WUxc8Psb3M2AQ&ved=0ahUKEwiy3dmz8sONAxUVSvEDHbEeE0sQ4dUDCBA&uact=5&oq=k%C3%B6fte+ya%C4%9Fmuru+izle&gs_lp=Egxnd3Mtd2l6LXNlcnAiFGvDtmZ0ZSB5YcSfbXVydSBpemxlMggQABiABBjLATIIEAAYgAQYywEyCBAAGIAEGMsBMggQABiABBjLATIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeSPEOUMYFWOwKcAF4AJABAJgB7wGgAZsKqgEFMC4xLjW4AQPIAQD4AQGYAgagAokJwgIKEAAYsAMY1gQYR8ICCBAuGIAEGMsBmAMAiAYBkAYEkgcFMS4wLjWgB_4isgcDMi01uAeFCcIHBTAuMi40yAcW&sclient=gws-wiz-serp",
+      url: "https://cocuklasinema.com/assets/admin/images/movie/uxvwCloudy%20With%20A%20Chance%20Of%20Meatballs.jpg"
+    },
+    {
+  "ad": "Testere",
+  "tur": "Film",
+  "puan": "7.6",
+  "konu": "İki adam uyandıklarında kendilerini bir cesedin zıt taraflarında bulurlar, her biri diğerini öldürmek, kaçmak veya sonuçlarına katlanmak için belirli talimatlara sahiptir. Bu ikisi Jigsaw'un oyunlarındaki en son yarışmacılardır.",
+  "webURL": "https://www.google.com/search?q=testere+izle&sca_esv=8f2d608cc335416a&biw=767&bih=826&sxsrf=AE3TifMhNlZ4HVw94LFu3dOEJijUxCA6Ig%3A1748623746767&ei=guE5aKfBLsyExc8P-JSG8Ag&ved=0ahUKEwinipaK08uNAxVMQvEDHXiKAY4Q4dUDCBA&uact=5&oq=testere+izle&gs_lp=Egxnd3Mtd2l6LXNlcnAiDHRlc3RlcmUgaXpsZTIIEAAYgAQYywEyCBAAGIAEGMsBMgYQABgWGB5Ikw9QwgRY_wtwAXgBkAEAmAGkA6ABjguqAQkwLjEuMS4yLjG4AQPIAQD4AQGYAgagAp0LwgIHEC4YsAMYJ8ICChAAGLADGNYEGEfCAgoQLhiABBgnGIoFwgIIEC4YgAQYywHCAgsQLhiABBjUAhjLAZgDAIgGAZAGCZIHCTEuMS4xLjIuMaAH5SyyBwkwLjEuMS4yLjG4B5oLwgcFMS40LjHIBww&sclient=gws-wiz-serp",
+  "url": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcThD6lkuyM9YN_jl3icAl7qFJm4jl-0UTxk7mTh9CmtXzp7bWir"
+},
+{
+  "ad": "The Social Network",
+  "tur": "Film",
+  "puan": "7.8",
+  "konu": "Harvard Üniversitesi öğrencisi Mark Zuckerberg, Facebook adıyla tanınacak sosyal paylaşım sitesini kurarken, fikirlerini çaldığı iddiasıyla ikizler ve daha sonra işten çıkarılan kurucu ortak tarafından dava edildi.",
+  "webURL": "https://www.google.com/search?sca_esv=151be9a0a91a555a&sxsrf=AE3TifP6kQv4u0pw5qMem9gBPOH7P_ZVFg:1748624819944&q=the+social+network+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeuYzzFkfneXafNx6OMdA4MRJEV50_rrHL3HywRIWX3bOtL43tziElAYUXB-bmRqBjF983QfuCpLjYal9eawjkm-ykegHkfFsE6Ck5HNo9-Sqz01wOc8L_T9fejw5eIBgQJCw6ZpbLw-6IewJa9sm21Vk5gomCw_8wtpmkBcjVQZnTtfS4w&sa=X&ved=2ahUKEwjW1fOJ18uNAxU_R_EDHY45HxAQ0pQJegQICBAB&biw=767&bih=826&dpr=1.25",
+  "url": "https://m.media-amazon.com/images/S/pv-target-images/ea4f1c75ddd9fd937a77875d48f9ce8225ed954afcefabe7a2195311b1a97ddd.jpg"
+},
+{
+  "ad": "Terrifier",
+  "tur": "Film",
+  "puan": "5.5",
+  "konu": "Cadılar Bayramı'nda Palyaço Art adında bir manyak, iki arkadaşını ve yoluna çıkan herkesi terörize eder.",
+  "webURL": "https://www.google.com/search?q=terrifier%20izle&sca_esv=8f2d608cc335416a&sxsrf=AE3TifN1yP4uD0Ntjz84O3PYkBr_92k6PA%3A1748623829106&ei=1eE5aIafBt-N7NYPrYGSKA&ved=2ahUKEwjxzbjU08uNAxXfBtsEHa2ABAUQwfILegQICxAE&uact=5&oq=terrifier%20izle&gs_lp=Egxnd3Mtd2l6LXNlcnAaAhgCIg50ZXJyaWZpZXIgaXpsZTIIEAAYgAQYywEyCBAAGIAEGMsBMgYQABgWGB5I5x5QiQdYnhRwAHgCkAEAmAG7AqAB4wiqAQcwLjIuMi4xuAEDyAEA-AEBmAIGoALzCMICBBAAGEfCAgoQLhiABBhDGIoFwgIKEAAYgAQYQxiKBcICDRAAGIAEGEMYigUYiwPCAhMQLhiABBhDGKQDGKgDGIoFGIsDwgILEAAYgAQYywEYiwPCAgsQABiABBiRAhiKBcICCxAuGIAEGJECGIoFwgIKEAAYgAQYFBiHAsICBRAAGIAEwgIIEAAYgAQYxwOYAwCIBgGQBgiSBwcxLjIuMi4xoAfAIbIHBzAuMi4yLjG4B-8IwgcFMC40LjLIBw0&sclient=gws-wiz-serp&no_sw_cr=1&zx=1748623904192&sssc=1&vet=12ahUKEwjxzbjU08uNAxXfBtsEHa2ABAUQwfILegQICxAE..i",
+  "url": "https://hdfilm.tv.tr/wp-content/uploads/2023/10/Posteri-84.jpg"
+},
+{
+  "ad": "500 Days of Summer",
+  "tur": "Film",
+  "puan": "7.6",
+  "konu": "Ruh eşi olduğuna inandığı kız tarafından terk edilen umutsuz romantik Tom Hansen, ilişkilerini gözden geçirerek işlerin nerede ters gittiğini ve onu nasıl geri kazanabileceğini anlamaya çalışır.",
+  "webURL": "https://www.google.com/search?q=500+days+of+summer+izle&sca_esv=8f2d608cc335416a&sxsrf=AE3TifMA7eG6IO17RQAHnnoguEfZqezndQ%3A1748623941669&ei=ReI5aMvNKOSJ7NYPovjy6A0&ved=0ahUKEwiLhI7n08uNAxXkBNsEHSK8HN0Q4dUDCBA&uact=5&oq=500+days+of+summer+izle&gs_lp=Egxnd3Mtd2l6LXNlcnAaAhgCIhc1MDAgZGF5cyBvZiBzdW1tZXIgaXpsZTIKECMYgAQYJxiKBTIIEAAYgAQYywEyCBAAGIAEGMsBMggQABiABBjLATIIEAAYgAQYywEyCBAAGIAEGMsBMggQABiABBjLATIIEAAYgAQYywEyCBAAGIAEGMsBMgYQABgWGB5IihNQ7gpYkxFwAXgBkAEAmAHDAaABogaqAQMwLjW4AQPIAQD4AQGYAgagArcGwgIHECMYsAMYJ8ICChAAGLADGNYEGEfCAg0QABiABBiwAxhDGIoFwgIKEAAYgAQYQxiKBcICCxAAGIAEGMsBGIsDwgITEC4YgAQYQxioAxiKBRiLAxjuBcICFBAuGIAEGPADGKQDGKgDGMsBGIsDwgILEAAYgAQYkQIYigWYAwCIBgGQBgqSBwMxLjWgB7IssgcDMC41uAezBsIHBTAuNC4yyAcS&sclient=gws-wiz-serp",
+  "url": "https://m.media-amazon.com/images/S/pv-target-images/8c84ee74ffc79594705de5a41a2081cd896fecccb6f2bf96a7c5996b68bd1b52.jpg"
+},
+{
+  "ad": "Turbo",
+  "tur": "Film",
+  "puan": "6.4",
+  "konu": "Garip bir kaza, sıradan bir bahçe salyangozunun en büyük hayaline, Indy 500'ü kazanmasına yardımcı olabilir.",
+  "webURL": "https://www.google.com/search?sca_esv=151be9a0a91a555a&sxsrf=AE3TifM4-sT52ZN8uYVxYw8cGtQFPJZFWg:1748625098168&q=turbo+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmMhBBiPk9cxZiqN0IQ1d_JE3gBMAGgReVymwSDpqMD5EZ6Hz8C5IARrlacz3MYmMaIAQl1lJcJz6-K537aHO9xGH5uaTa4hlyynt_HqK7JrLXDgIpg5UK7zEKXWPFUhlGKi52Dr53v_HqTC3MER_gp9Tk-yUw&sa=X&ved=2ahUKEwiIj8mO2MuNAxWaZ_EDHWcOLOAQ0pQJegQIDBAB&biw=767&bih=826&dpr=1.25",
+  "url": "https://upload.wikimedia.org/wikipedia/tr/b/b9/Turbo_%28film%29_poster.jpg"
+},
+{
+  "ad": "Yeni Nesil",
+  "tur": "Film",
+  "puan": "6.3",
+  "konu": "Auradon kralı ve kraliçesinin genç oğlu, kötü adamların sorunlu çocuklarına krallıktaki hazırlık okuluna gitme şansı sunar.",
+  "webURL": "https://www.google.com/search?sca_esv=151be9a0a91a555a&sxsrf=AE3TifO3y2QpVoyTDooK10n_gDtDkzhFDQ:1748625556829&q=yeni+nesil+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmPgfe_7ak8LUsonpWCvT6w65kX8H6mRWnnD519MpbjPF8WRgd7YKfCo_79r0Eq9luN4TKGXMkXOa7EYLk-9JXZtRjA4g3DLf4QKNCCDwK7or_D7OOJFDW2rISy1wWqSRh3E9Op4zTgMTfnvgV2580fk-H-_IQ&sa=X&ved=2ahUKEwibwKPp2cuNAxW_QfEDHbPiBoMQ0pQJegQIBxAB&biw=767&bih=826&dpr=1.25",
+  "url": "https://www.filmler.com/wp-content/uploads/2022/12/yeni-nesil-3-scaled.jpg"
+},
+     {
+      konu: "Wellington-on-Sea kasabası halkı için unutulmaz bir Noel, tarihin en kötü kar fırtınasının herkesin, özellikle de Noel Baba'nın planlarını altüst etmesiyle sona eriyor.",
+      ad: "Bir Zamanlar Noel'de",
+      tür: "Film",
+      puan: "6.8",
+      url: "https://images.justwatch.com/poster/322603119/s718/bir-zamanlar-noelde.jpg" ,
+      webURL: "https://www.google.com/search?sca_esv=dedaa8b7a5fcd1a5&sxsrf=AE3TifMa7odK2AwKjT0d0-04aqnsYZpXow:1748701949021&q=bir+zamanlar+noel%27de+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmPgfe_7ak8LUsonpWCvT6w65kX8H6mRWnnD519MpbjPF8WRgd7YKfCo_79r0Eq9luN4TKGXMkXOa7EYLk-9JXZtRjA4g3DLf4QKNCCDwK7or_D7OOJFDW2rISy1wWqSRh3E9Op4zTgMTfnvgV2580fk-H-_IQ&sa=X&ved=2ahUKEwir-vSz9s2NAxVoBNsEHctZLqIQ0pQJegQIDxAB&biw=614&bih=826&dpr=1.25"
+    },
+     {
+      konu: "Yetim bir çocuk, büyücülük okuluna kaydolur ve burada kendisi, ailesi ve büyülü dünyayı rahatsız eden korkunç kötülük hakkındaki gerçeği öğrenir.",
+      ad: "Harry Potter",
+      tür: "Film",
+      puan: "7.4",
+      url: "https://images.justwatch.com/poster/264902120/s718/harry-potter-ve-ates-kadehi.jpg",
+      webURL: "https://www.google.com/search?sca_esv=dedaa8b7a5fcd1a5&sxsrf=AE3TifO1_uNuuR5x6SQtZ33haSJrXYXnWg:1748702007665&q=harry+potter+izle&source=lnms&fbs=AIIjpHz2LkAPJDdeiKYzFgacvjxV1_ouTPak7RwsRcjYoqlkCgomk_nm0to5ejMWRZDiwQqqb77NVva5X7hSgMtTbk44nzHUs5thSQxreqJ10d0sT4Oq0yuqE57438CjbNOlqxs4PTkEEF-xTeuQ2y5OMgN4g3c0xKiF8OXQvZ2UFa-NFY8o5NYoYkc9rT-ah1uZ7wfNI43Gi4Y5Tl_t6Ajhhu3vKLmKmgf2RsE5cDkhoQqeyrxQY98&sa=X&ved=2ahUKEwixo_DP9s2NAxXDVPEDHcIUKywQ0pQJegQICBAB&biw=614&bih=826&dpr=1.25"
+    },
+     {
+      konu: "Bir casusluk örgütü, gelecek vaat eden bir sokak çocuğunu ajansın eğitim programına alırken, sapkın bir teknoloji dehasından küresel bir tehdit ortaya çıkmaktadır.",
+      ad: "Kingsman",
+      tür: "Film",
+      puan: "7.7",
+      url: "https://m.media-amazon.com/images/M/MV5BODk1MTYwNTAtYmI5Zi00OWYyLWE0MzQtOWE4NDIxZmU2MjMwXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+      webURL:"https://www.google.com/search?q=kingsman&oq=k&gs_lcrp=EgZjaHJvbWUqDAgAECMYJxiABBiKBTIMCAAQIxgnGIAEGIoFMgYIARBFGDwyDAgCEC4YQxiABBiKBTIOCAMQRRgnGDsYgAQYigUyBggEEEUYOzIGCAUQRRg8MgYIBhBFGDwyBggHEEUYPdIBBzgxN2owajeoAgCwAgA&sourceid=chrome&ie=UTF-8"
+    },
+  {
+    url: "https://dnm.nflximg.net/api/v6/mAcAr9TxZIVbINe88xb3Teg5_OA/AAAABe2Fj7DMVN7nCRsuh4Fe5_3PTdhDHyD-fch6p2woB9-35dVq1CFYLhYrBdBg2bLtu-vGYayhgJ4UuROMKgpWgUji32hSg7NV9XAQTJVQjIMe4XYf05ra2dZja8xfHFdhVeE4Qw.jpg?r=50d",
+    ad: "Orion ve Karanlık",
+    tur: "Film",
+    puan: "6.3",
+    konu: "Aktif bir hayal gücüne sahip bir çocuk, yeni arkadaşı Dark adında dev, gülümseyen bir yaratıkla birlikte gece boyunca unutulmaz bir yolculuğa çıkar ve korkularıyla yüzleşir.",
+    webURL: "https://www.google.com/search?q=orion+and+the+dark&sca_esv=ca6a2bedbd114e2c&sxsrf=AE3TifNmlej9q_hrTxtWJgP87eFQ6Ke7lA%3A1748198327268&ei=t2MzaLqMENuHxc8PrsHyqAM&gs_ssp=eJzj4tVP1zc0zC40N7coyc4xYPQSyi_KzM9TSMxLUSjJSFVISSzKBgC-ugs2&oq=orio&gs_lp=Egxnd3Mtd2l6LXNlcnAiBG9yaW8qAggAMgoQLhiABBgnGIoFMgsQABiABBiRAhiKBTIFEC4YgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQLhiABDIFEC4YgAQyBRAAGIAEMiYQLhiABBiKBRiXBRjcBBjeBBjgBBj0AxjxAxj1Axj2Axj3A9gBAUjMPFAAWJAycAJ4AZABAJgBzwKgAfkJqgEHMC4xLjMuMbgBAcgBAPgBAZgCBqACmQmoAhDCAgcQIxgnGOoCwgIHEC4YJxjqAsICDRAjGPAFGCcYyQIY6gLCAg0QLhjRAxjHARgnGOoCwgIUEAAYgAQYkQIYtAIYigUY6gLYAQHCAhQQLhiABBiRAhi0AhiKBRjqAtgBAcICChAjGIAEGCcYigXCAgsQLhiABBiRAhiKBcICCBAuGIAEGNQCwgIXEC4YgAQYigUYlwUY3AQY3gQY4ATYAQHCAg4QLhiABBiRAhjUAhiKBcICChAAGIAEGEMYigWYAwbxBVjPrnCp3X5qugYGCAEQARgBkgcHMi4wLjMuMaAHoVOyBwUyLTMuMbgHjwnCBwUyLTQuMsgHJA&sclient=gws-wiz-serp"
+  },
+  {
+    url: "https://www.paribucineverse.com/files/movie_posters/HO00006371_638463881120712688_cilgin-hirsiz-4.png",
+    ad: "Çılgın Hırsız Serisi",
+    tur: "Film",
+    puan: "7.5",
+    konu: "Eski kötü adam Gru, yetim kızlarla tanışınca değişir. Komik minion’larla birlikte aile olmanın ve iyiliğin ne demek olduğunu keşfeder.",
+    webURL: "https://www.google.com/search?q=%C3%A7%C4%B1lg%C4%B1n+h%C4%B1rs%C4%B1z&oq=%C3%A7%C4%B1lg%C4%B1&gs_lcrp=EgZjaHJvbWUqBwgAEAAYgAQyBwgAEAAYgAQyBwgBEC4YgAQyBggCEEUYOTIHCAMQLhiABDIHCAQQABiABDIHCAUQLhiABDIHCAYQLhiABDIKCAcQLhjUAhiABDIKCAgQLhjUAhiABDIHCAkQABiABNIBCDE1OTVqMGo5qAIAsAIA&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/tr/f/ff/Otel_Transilvanya_-_afi%C5%9F.jpg",
+    ad: "Otel Transilvanya Serisi",
+    tur: "Film",
+    puan: "7.0",
+    konu: "Canavarlar için inşa edilmiş gizli bir otelde, Dracula'nın kızı Mavis’in bir insana aşık olmasıyla komik ve duygusal olaylar gelişir.",
+    webURL: "https://www.google.com/search?q=otel+transilvanya&oq=otel+transilvanya&gs_lcrp=EgZjaHJvbWUqBwgAEAAYjwIyBwgAEAAYjwIyDAgBEC4YJxiABBiKBTIHCAIQLhiABDIHCAMQLhiABDIMCAQQLhgUGIcCGIAEMgcIBRAAGIAEMgkIBhAAGAoYgAQyBwgHEC4YgAQyBwgIEAAYgAQyBwgJEAAYgATSAQg4MDk5ajBqOagCBLACAfEFwKvxD2Bvmh8&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://m.media-amazon.com/images/M/MV5BZDU5MDNiMGItYjVmZi00NDUxLTg2OTktNGE0NzNlNzM4NzgyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    ad: "Kung Fu Panda Serisi",
+    tur: "Film",
+    puan: "7.5",
+    konu: "Tembel ve hayalperest Po, beklenmedik şekilde Ejderha Savaşçısı seçilir. Ustalarla birlikte kung fu öğrenip ülkesini kötülüğe karşı savunur.",
+    webURL: "https://www.google.com/search?q=kung+fu+panda&oq=kung&gs_lcrp=EgZjaHJvbWUqBggCEEUYOzIGCAAQRRg8MgYIARBFGDkyBggCEEUYOzIHCAMQABiPAjIHCAQQABiPAtIBCTEwNTQzajBqOagCALACAA&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://i.pinimg.com/736x/14/39/bb/1439bb45b6b09f0d990a8d455c4df431.jpg",
+    ad: "Marvel Evreni",
+    tur: "Film",
+    puan: "7.3",
+    konu: "İçinde dizi ve filmlerin olduğu genel konunun süper kahramanlar olduğu geneli çizgi roman uyarlaması olan geniş bir evren",
+    webURL: "https://www.google.com/search?q=marvel+filmleri&sca_esv=ca6a2bedbd114e2c&sxsrf=AE3TifNaDF5iJ36PRqFFWgir7d67pgjtXw%3A1748199254468&ei=VmczaPesHNaUxc8P-NmY6Qg&ved=0ahUKEwj3r7zcpb-NAxVWSvEDHfgsJo0Q4dUDCBA&uact=5&oq=marvel+filmleri&gs_lp=Egxnd3Mtd2l6LXNlcnAiD21hcnZlbCBmaWxtbGVyaTIHECMYJxjqAjIHECMYJxjqAjIHEC4YJxjqAjIHECMYJxjqAjIHECMYJxjqAjIHECMYJxjqAjIHEC4YJxjqAjIHEC4YJxjqAjINECMY8AUYJxjJAhjqAjIHECMYJxjqAkjlL1AAWL8ccAF4AZABAJgBAKABAKoBALgBA8gBAPgBAZgCAaACBqgCCpgDBvEFVc2ZwjAJuFaSBwExoAcAsgcAuAcAwgcDMi0xyAcF&sclient=gws-wiz-serp"
+  },
+   {
+    url: "https://www.supermanhomepage.com/images/logos-emblems/120119-dclogo1.jpg",
+    ad: "Dc Evreni",
+    tur: "Film",
+    puan: "7.3",
+    konu: "İçinde dizi ve filmlerin olduğu genel konunun süper kahramanlar olduğu geneli çizgi roman uyarlaması olan geniş bir evren",
+    webURL: "https://www.google.com/search?q=dc+filmleri&oq=dc+filmleri&gs_lcrp=EgZjaHJvbWUyCQgAEEUYORiABDIHCAEQABiABDIICAIQABgWGB4yCAgDEAAYFhgeMggIBBAAGBYYHjIICAUQABgWGB4yCAgGEAAYFhgeMgYIBxBFGDzSAQg4MTkzajBqNKgCArACAQ&sourceid=chrome&ie=UTF-8"
+  },
+
+  {
+    url: "https://tr.web.img4.acsta.net/pictures/15/06/18/11/21/140827.jpg",
+    ad: "Pixels",
+    tur: "Film",
+    puan: "5.6",
+    konu: "Uzaylılar, klasik atari oyunlarının video görüntülerini savaş ilanı olarak algılayıp, video oyunları aracılığıyla Dünya'ya saldırıyorlar.",
+    webURL: "https://www.google.com/search?q=pixels&sca_esv=ca6a2bedbd114e2c&sxsrf=AE3TifNqjR-HLHFNSveSBTf408mErtrrAg%3A1748199588036&ei=pGgzaK-AAo_BwPAPq4ypsQQ&oq=pixek&gs_lp=Egxnd3Mtd2l6LXNlcnAiBXBpeGVrKgIIADIHECMYsQIYJzILEAAYgAQYkQIYigUyCxAAGIAEGJECGIoFMgoQABiABBgKGMsBMgcQLhiABBgKMgcQABiABBgKMgcQABiABBgKMhAQLhiABBjRAxjUAhjHARgKMgcQABiABBgKMgcQABiABBgKSOAXUABYowpwAXgBkAEAmAGQB6AB2ROqAQkyLTIuNS0yLjG4AQPIAQD4AQGYAgagAvQTqAIKwgIHECMYJxjqAsICBxAuGCcY6gLCAgoQIxiABBgnGIoFwgIEECMYJ8ICChAuGIAEGCcYigXCAgUQABiABMICBRAuGIAEwgILEC4YgAQYkQIYigXCAgoQABiABBhDGIoFwgIKEC4YgAQYQxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAgoQABiABBgUGIcCwgIOEC4YgAQY0QMY1AIYxwGYAwTxBS38EiZrCo29kgcNMS4wLjIuMC4yLjAuMaAH8keyBwsyLTIuMC4yLjAuMbgH8BPCBwUwLjEuNcgHGg&sclient=gws-wiz-serp"
+  },
+  {
+    url: "https://m.media-amazon.com/images/M/MV5BYTRkMzFlZjItYWM0Ni00NWQwLTk3MWEtYjg5ZjQ0MDE2ZDFhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    ad: "A.X.L",
+    tur: "Film",
+    puan: "5.3",
+    konu: "AXL, Miles ile özel bir dostluk kuran ve yeni arkadaşını korumak için her şeyi göze alan, son derece gizli bir robot köpektir",
+    webURL: "https://www.google.com/search?q=axl&sca_esv=ca6a2bedbd114e2c&sxsrf=AE3TifPz4IC0SHD1TlXWxFbniFdCRcFhog%3A1748199745044&ei=QWkzaJTAApiCxc8P17K_wQQ&ved=0ahUKEwjU5LLGp7-NAxUYQfEDHVfZL0gQ4dUDCBA&uact=5&oq=axl&gs_lp=Egxnd3Mtd2l6LXNlcnAiA2F4bDIKECMYgAQYJxiKBTIKEC4YgAQYQxiKBTIKEC4YgAQYQxiKBTIKEAAYgAQYQxiKBTIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBxAuGIAEGAoyBRAAGIAESLMKUABYqAZwAXgAkAEAmAHEAqABjAaqAQcwLjEuMS4xuAEDyAEA-AEBmAIEoAKjBqgCCsICBxAjGCcY6gLCAgcQLhgnGOoCwgIMECMYgAQYExgnGIoFwgIQEC4YgAQY0QMYQxjHARiKBcICBRAuGIAEwgILEC4YgAQY0QMYxwGYAwTxBQqFnuKWjOTckgcHMS4wLjIuMaAH1jSyBwUyLTIuMbgHnwbCBwUwLjEuM8gHEw&sclient=gws-wiz-serp"
+  },
+  {
+    url: "https://m.media-amazon.com/images/M/MV5BMTU0MjAwMDkxNV5BMl5BanBnXkFtZTgwMTA4ODIxNjM@._V1_.jpg",
+    ad: "Next Gen",
+    tur: "Film",
+    puan: "6.6",
+    konu: "Çok gizli bir robotla kurulan arkadaşlık, yalnız bir kızın hayatını, zorbalar, kötü robotlar ve entrikacı bir deliyle mücadele ederken heyecan verici bir maceraya dönüştürür.",
+    webURL: "https://www.google.com/search?q=next+gen&sca_esv=ca6a2bedbd114e2c&sxsrf=AE3TifOStNRZdDz6rd2cgaJbWvwWpqgsyQ%3A1748199899878&ei=22kzaNWsNe-Cxc8PpqGa-Q4&gs_ssp=eJzj4tVP1zc0TLMoMKoqMC8wYPTiyEutKFFIT80DAF8NB6w&oq=next&gs_lp=Egxnd3Mtd2l6LXNlcnAiBG5leHQqAggAMgoQLhiABBgnGIoFMhAQLhiABBjRAxhDGMcBGIoFMgsQABiABBiRAhiKBTIKEAAYgAQYQxiKBTIQEC4YgAQY0QMYQxjHARiKBTIFEC4YgAQyBRAuGIAEMgUQABiABDIFEAAYgAQyBRAAGIAESKUPUABY9AZwAXgBkAEAmAH7AaAB-QaqAQUwLjEuM7gBAcgBAPgBAZgCBaACkgeoAgrCAgcQIxgnGOoCwgIHEC4YJxjqAsICChAjGIAEGCcYigXCAgoQLhiABBhDGIoFwgIIEC4YgAQY1ALCAgsQLhiABBjRAxjHAZgDA_EFb09aS7h5GtSSBwUxLjEuM6AH8kqyBwUwLjEuM7gHjwfCBwUwLjEuNMgHFg&sclient=gws-wiz-serp"
+  },
+  {
+    url: "https://m.media-amazon.com/images/M/MV5BMTkxMTczNTA4Nl5BMl5BanBnXkFtZTgwNDAyMzgwODM@._V1_.jpg",
+    ad: "I Am Mother",
+    tur: "Film",
+    puan: "6.7",
+    konu: "İnsanlığın yok oluşunun ardından, genç bir kız, dünyayı yeniden doldurmak için tasarlanmış bir robot tarafından büyütülür. Ancak, açıklanamayan bir yabancı endişe verici haberlerle geldiğinde, aralarındaki benzersiz bağ tehdit altına girer.",
+    webURL: "https://www.google.com/search?gs_ssp=eJzj4tVP1zc0TMsoz85LtrA0YPTiObJRITFXITe_JCO1CACKLQnK&q=%C4%B1+am+mother&oq=%C4%B1+am+m%C4%B1ther&gs_lcrp=EgZjaHJvbWUqDAgBEC4YJxiABBiKBTIGCAAQRRg5MgwIARAuGCcYgAQYigUyBwgCEC4YgAQyBwgDEC4YgAQyCAgEEAAYFhgeMggIBRAAGBYYHjIICAYQABgWGB4yCAgHEAAYFhgeMggICBAAGBYYHtIBCTE1NTM4ajBqOagCALACAA&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_.jpg",
+    ad: "Interstellar",
+    tur: "Film",
+    puan: "8.7",
+    konu: "Gelecekte Dünya yaşanmaz bir yer haline geldiğinde, çiftçi ve eski NASA pilotu Joseph Cooper, bir grup araştırmacıyla birlikte bir uzay aracını kullanarak insanlar için yeni bir gezegen bulmakla görevlendirilir",
+    webURL: "https://www.google.com/search?q=interstellar&oq=in&gs_lcrp=EgZjaHJvbWUqBggDEEUYOzIGCAAQRRg7MgYIARBFGDsyBggCEEUYOTIGCAMQRRg7MgcIBBAAGI8CMgYIBRBFGDwyBggGEEUYPDIGCAcQRRg80gEJMTEyNDdqMGo5qAIAsAIA&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://play-lh.googleusercontent.com/kSeBtvMBvS9P9jSwP-bVNmrH8yANJeKZrbxUIiw6zSOpRibxBn1IP7PEHrDeoIz0AmQPddbRPMEgh8KL8ohd",
+    ad: "Inception",
+    tur: "Film",
+    puan: "8.8",
+    konu: "Rüya paylaşım teknolojisini kullanarak şirket sırlarını çalan bir hırsıza, bir CEO'nun zihnine bir fikir yerleştirme görevi verilir; ancak onun trajik geçmişi, şirketin sonunu getirebilir.",
+    webURL: "https://www.google.com/search?gs_ssp=eJzj4tLP1TcwMzMszDE2YPTizMxLTi0oyczPAwBLMQcK&q=inception&oq=ince&gs_lcrp=EgZjaHJvbWUqDAgBEC4YQxiABBiKBTIGCAAQRRg5MgwIARAuGEMYgAQYigUyDAgCEAAYQxiABBiKBTIMCAMQLhhDGIAEGIoFMgwIBBAAGEMYgAQYigUyDAgFEC4YQxiABBiKBTIMCAYQABhDGIAEGIoFMgwIBxAAGEMYgAQYigUyDAgIEAAYQxiABBiKBdIBCDMyNDZqMGo5qAIEsAIB8QWa150u0cy6CfEFmtedLtHMugk&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://m.media-amazon.com/images/M/MV5BOTI5ODc3NzExNV5BMl5BanBnXkFtZTcwNzYxNzQzMw@@._V1_.jpg",
+    ad: "V for Vendetta",
+    tur: "Film",
+    puan: "8.1",
+    konu: "Gelecekteki bir İngiliz distopyasında, sadece 'V' takma adıyla bilinen karanlık bir özgürlük savaşçısı, genç bir kadının yardımıyla zalim hükümeti devirmeyi planlamaktadır.",
+    webURL: "https://www.google.com/search?gs_ssp=eJzj4tTP1TcwMzHNNjVg9OIrU0jLL1IoS81LSS0pSQQAZJsILw&q=v+for+vendetta&oq=v+&gs_lcrp=EgZjaHJvbWUqDAgBEC4YJxiABBiKBTIGCAAQRRg5MgwIARAuGCcYgAQYigUyBggCEEUYPDIGCAMQRRg8MgYIBBBFGDwyBggFEEUYPDIGCAYQRRg8MgYIBxBFGDzSAQkxNzE5NmowajmoAgSwAgHxBZ49oWQTGjcl&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p11671_p_v8_ad.jpg",
+    ad: "Dead Poets Society",
+    tur: "Film",
+    puan: "8.1",
+    konu: "Bağımsız öğretmen John Keating, 1959'da bir zamanlar yıldız bir öğrenci olduğu prestijli New England erkek yatılı okuluna geri döner ve şiiri kullanarak öğrencilerini kendini ifade etme konusunda yeni zirvelere taşımaya teşvik eder.",
+    webURL: "https://www.google.com/search?q=dead+poets+society&sca_esv=ca6a2bedbd114e2c&sxsrf=AE3TifOgFrLTcl9-hqzXe_-wwNqIoRT8Xw%3A1748200164582&ei=5GozaNaOI4GBxc8P_c3o4Qw&oq=dead&gs_lp=Egxnd3Mtd2l6LXNlcnAiBGRlYWQqAggAMgoQIxiABBgnGIoFMgoQABiABBhDGIoFMgoQABiABBhDGIoFMgoQABiABBhDGIoFMgoQABiABBhDGIoFMgoQABiABBhDGIoFMgoQABiABBhDGIoFMgoQABiABBhDGIoFMgUQABiABDIFEAAYgARIqg5QAFjKBHABeAGQAQCYAY0FoAH-CaoBCTAuMS4yLjUtMbgBA8gBAPgBAZgCBaACnAqoAgrCAgcQLhgnGOoCwgIHECMYJxjqAsICChAuGIAEGCcYigXCAgsQLhiABBjRAxjHAcICCBAuGIAEGNQCwgIQEC4YgAQY0QMYxwEYJxiKBcICBBAjGCfCAgoQLhiABBhDGIoFwgINEC4YgAQYQxjUAhiKBZgDBvEFkijKGw5AhQGSBwkxLjEuMi41LTGgB5VOsgcJMC4xLjIuNS0xuAeWCsIHBTItNC4xyAca&sclient=gws-wiz-serp"
+  },
+    {
+    url: "https://m.media-amazon.com/images/M/MV5BMTg1NDM0MGEtY2NhNi00MzZhLTkxNGMtYWQ0MWRkOTdiZTQ3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    ad: "Amatör",
+    tur: "Film",
+    puan: "6.7",
+    konu: "CIA'deki amirleri, karısının Londra'daki bir terör saldırısında öldürülmesinin ardından harekete geçmeyi reddedince, bir şifre çözücü meseleyi kendi eline alır.(Mr.Robottan tanıdığımız Rami Malek başrolünde)",
+    webURL: "https://www.google.com/search?q=amat%C3%B6r+filmi&oq=amat%C3%B6r+filmi+&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIGCAEQRRhAMhAIAhBFGBMYJxg7GIAEGIoFMgcIAxAAGO8FMgoIBBAAGIAEGKIEMgcIBRAAGO8F0gEIMzk1OWowajmoAgKwAgE&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://m.media-amazon.com/images/M/MV5BZjNmNmU0ZTUtMGM4MC00Y2YzLTk1MDktMDJkYmY5NWQ3OWEwXkEyXkFqcGc@._V1_.jpg",
+    ad: "4N1K",
+    tur: "Film",
+    puan: "4.9",
+    konu: "Ergenlik çağındaki gençlerin hayatlarını konu alan romantik bir komedi.",
+    webURL: "https://www.google.com/search?q=4n1k&oq=4n1k+&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIICAEQRRgnGDsyBggCEEUYQDINCAMQLhiRAhiABBiKBTIKCAQQLhjUAhiABDIHCAUQLhiABDIHCAYQLhiABDIGCAcQRRg90gEIMjg1MGowajmoAgCwAgA&sourceid=chrome&ie=UTF-8"
+  }
+];
+
+var diziler = [
+{
+    url: "https://m.media-amazon.com/images/I/71eo2tqEdKL.jpg",
+    ad: "Mr.Robot",
+    tur: "Dizi",
+    puan: "8.5",
+    konu: "Zeki ama dengesiz bir siber güvenlik mühendisi ve tetikçi bilgisayar korsanı olan Elliot, şirketinin korumakla yükümlü olduğu yozlaşmış şirketi devirmeye çalışırken, kendisi ve karanlık müttefikleri küresel bir kaosun karmaşık oyununda kilit bir figür haline gelir.",
+    webURL:"https://www.google.com/search?q=mr+robot+izle&oq=mr+robot+izle&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQABiABDIHCAIQABiABDIICAMQABgWGB4yCAgEEAAYFhgeMggIBRAAGBYYHjIICAYQABgWGB4yCggHEAAYChgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCDQwOTFqMGo5qAIEsAIB8QWq2EqQDIWgAA&sourceid=chrome&ie=UTF-8"
+  },
+  {
+  "ad": "Galaksinin En iyi İkinci Hastanesi",
+  "tur": "Dizi",
+  "puan": "6.4",
+  "konu": "Sleech ve Klak, nadir görülen bilimkurgu hastalıkları konusunda uzmanlaşmış iki zeki kadın uzaylı doktor ve tuhaf vakaları çözmeleri gerekir.",
+  "webURL": "https://www.google.com/search?sca_esv=151be9a0a91a555a&sxsrf=AE3TifMEpR9P6xa2X0YLaLDkc9uNFBNKKA:1748624583183&q=galaksinin+en+iyi+ikinci+hastanesi+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmMU8EWskMk2JSE__efdUJ3x-dd8PyEzi5Y9BtPQcYyUv_ilqFuFQXjC9y-cgtZCfOLyMxI2yHpPexTSptR0343e8vEGrhMPvjjvevSOt_x4xdubo1s7qn8jd8x6GFhEOAuBEqhJm7KkC3lJClg21jxHd5-OIg&sa=X&ved=2ahUKEwjC8YCZ1suNAxWPQvEDHQ2SKs8Q0pQJegQIFBAB&biw=767&bih=826&dpr=1.25",
+  "url": "https://m.media-amazon.com/images/M/MV5BNzcyODVlYjMtODZkMi00YzQwLTg4ODEtY2Q0MDRlOTZhNzc0XkEyXkFqcGc@._V1_.jpg"
+},
+{
+konu: "Tehlikeli bir dünyada uyanan üç genç, hayatta kalabilmek için birbirleriyle nasıl bir bağ kurduklarını anlamaya çalışırlar.",
+ad: "The Hollow",
+tur: "Dizi",
+puan: "7.2",
+webURL: "https://www.google.com/search?q=the+hollow+izle&sca_esv=768393473445289f&sxsrf=AE3TifNn3_kmBGISHWTDLPh_8us4MSw4ZA%3A1748357539545&ei=o9E1aMOHIc6zwPAPu4SGgAE&oq=the+hollowizle&gs_lp=Egxnd3Mtd2l6LXNlcnAiDnRoZSBob2xsb3dpemxlKgIIADIHEAAYgAQYDTIIEAAYCBgNGB4yChAAGAgYChgNGB4yCBAAGAgYDRgeMggQABgIGA0YHjIIEAAYCBgNGB4yCBAAGAgYDRgeMggQABgIGA0YHjIFEAAY7wUyCBAAGIAEGKIESPMeUNwHWPYKcAB4ApABAJgB6QGgAdoGqgEFMC4xLjO4AQHIAQD4AQGYAgWgAvEGwgIEEAAYR8ICBxAuGIAEGArCAgsQLhiABBiRAhiKBcICBRAAGIAEwgIHEAAYgAQYCsICBxAjGLACGCfCAgcQLhiABBgNwgIKEC4YgAQY1AIYDZgDAIgGAZAGCJIHBTEuMS4zoAejObIHBTAuMS4zuAftBsIHBTAuMS40yAcS&sclient=gws-wiz-serp",
+url: "https://cizgimax.online/wp-content/uploads/2024/01/episodes/The-Hollow--1-Sezon-izle.jpg"
+},
+{
+konu: "James'in hikayesini anlatıyor. Hayata dair gözlemleri, günlük sıkıntılara dair komik çıkışlarını besliyor ve onları absürt seviyelere çıkarıyor.",
+ad: "Acayipgiller",
+tur: "Dizi",
+puan: "6.3",
+webURL: "https://www.google.com/search?q=oddballs+izle&sca_esv=2b443bd0849e857f&biw=614&bih=826&sxsrf=AE3TifMi0Pz6B2w7l6k_mE8g2vYaVYopBw%3A1748271421302&ei=PYE0aIWYEsmJ7NYPzOuySQ&oq=oddballs+iz&gs_lp=Egxnd3Mtd2l6LXNlcnAiC29kZGJhbGxzIGl6KgIIADIIEAAYgAQYywEyCxAAGIAEGIYDGIoFMgsQABiABBiGAxiKBTILEAAYgAQYhgMYigUyCxAAGIAEGIYDGIoFMgUQABjvBTIIEAAYgAQYogQyBRAAGO8FSJsZUOwEWOUPcAN4AZABAJgBwwGgAdcGqgEDMC41uAEDyAEA-AEBmAIIoAL2BsICChAAGLADGNYEGEfCAg0QABiABBiwAxhDGIoFwgIFEAAYgATCAgsQLhiABBjHARivAcICBhAAGBYYHsICBRAhGKABwgILEAAYgAQYkQIYigWYAwCIBgGQBgySBwUzLjQuMaAHmR6yBwUwLjQuMbgH7QbCBwUwLjUuM8gHFw&sclient=gws-wiz-serp",
+url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAwYSEWgdJ413gckoSzjIQ9yVgdRaO9SH38Q&s"
+},
+{
+  "ad": "Secret Level",
+  "tur": "Dizi",
+  "puan": "7.3",
+  "konu": "Bu animasyon antoloji serisinde, ikonik video oyunlarının dünyalarında geçen orijinal hikayeler yer alıyor.",
+  "webURL": "https://www.google.com/search?sca_esv=151be9a0a91a555a&sxsrf=AE3TifMuR06C2fEWeHrzysvlEA8Upl1MSw:1748624994268&q=gizli+seviye+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmMhBBiPk9cxZiqN0IQ1d_JE3gBMAGgReVymwSDpqMD5EZ6Hz8C5IARrlacz3MYmMaIAQl1lJcJz6-K537aHO9xGH5uaTa4hlyynt_HqK7JrLXDgIpg5UK7zEKXWPFUhlGKi52Dr53v_HqTC3MER_gp9Tk-yUw&sa=X&ved=2ahUKEwiAxIPd18uNAxW0RvEDHQ2eKbwQ0pQJegQIDxAB&biw=767&bih=826&dpr=1.25",
+  "url": "https://m.media-amazon.com/images/M/MV5BZWEwMjgwOTYtZmM1MC00MzdhLWJhMmUtNmNhNGMxMDdkYzNmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg"
+},
+{
+konu: "Rastgele genç arketiplerin her ne pahasına olursa olsun final ödülü için yarıştığı, hayatta kalma gerçeklik şovlarının animasyonlu hicvi.",
+ad: "Total Drama Adası",
+tur: "Dizi",
+puan: "7.4",
+webURL: "https://www.google.com/search?q=drama+adas%C4%B1+izle&sca_esv=2b443bd0849e857f&sxsrf=AE3TifPm07NY6MOSpJRXq38aUGUULKgPRg%3A1748271007211&ei=n380aMDTDMKA1fIPgLbEuAg&ved=0ahUKEwiAn-yCscGNAxVCQFUIHQAbEYcQ4dUDCBA&uact=5&oq=drama+adas%C4%B1+izle&gs_lp=Egxnd3Mtd2l6LXNlcnAiEWRyYW1hIGFkYXPEsSBpemxlMggQABiABBjLATIIEAAYgAQYywEyBhAAGBYYHjIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIFEAAY7wVIsQ5Q0gRYyQpwAXgBkAEAmAHiAaABgAeqAQUwLjQuMbgBA8gBAPgBAZgCBqACmQfCAgoQABiwAxjWBBhHwgINEAAYgAQYsAMYQxiKBcICBxAAGIAEGBPCAgcQLhiABBgTmAMAiAYBkAYJkgcFMS40LjGgB5klsgcFMC40LjG4B5IHwgcFMC4yLjTIBxU&sclient=gws-wiz-serp",
+url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw92iGxPSUzyhM8U4uK_YT3MbU7c8NT52aCA&s"
+} , 
+{
+  "ad": "Hey Jessie",
+  "tur": "Dizi",
+  "puan": "6.2",
+  "konu": "Hayallerinin peşinden gitmek için New York'a taşınan Teksaslı bir genç kız, tanınmış bir çiftin dört çocuğuna bakıcılık yapmaya başlar.",
+  "webURL": "https://www.google.com/search?sca_esv=151be9a0a91a555a&sxsrf=AE3TifP9zR8-Fq_LxvH9FIG4fJFW5cdkww:1748625660748&q=hey+jessie+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmMhBBiPk9cxZiqN0IQ1d_JE3gBMAGgReVymwSDpqMD5EZ6Hz8C5IARrlacz3MYmMaIAQl1lJcJz6-K537aHO9xGH5uaTa4hlyynt_HqK7JrLXDgIpg5UK7zEKXWPFUhlGKi52Dr53v_HqTC3MER_gp9Tk-yUw&sa=X&ved=2ahUKEwjzp-qa2suNAxW2SfEDHaMsERMQ0pQJegQIEhAB&biw=767&bih=826&dpr=1.25",
+  "url": "https://static.wikia.nocookie.net/disney-mania/images/7/7c/Jessie.jpg/revision/latest?cb=20211018201210"
+},
+{
+  "ad": "Soy Luna",
+  "tur": "Dizi",
+  "puan": "6.7",
+  "konu": "Luna Valente adında Meksikalı bir kızın Arjantin'e taşınması ve burada paten sporuna olan aşkını keşfetmesiyle ilgili Arjantin yapımı bir pembe dizi.",
+  "webURL": "https://www.google.com/search?sca_esv=151be9a0a91a555a&sxsrf=AE3TifOF0o6GbbsWCUkNLhDEri1NWQbl3Q:1748625788329&q=soy+luna+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmPgfe_7ak8LUsonpWCvT6w65kX8H6mRWnnD519MpbjPF8WRgd7YKfCo_79r0Eq9luN4TKGXMkXOa7EYLk-9JXZtRjA4g3DLf4QKNCCDwK7or_D7OOJFDW2rISy1wWqSRh3E9Op4zTgMTfnvgV2580fk-H-_IQ&sa=X&ved=2ahUKEwijidXX2suNAxXDQ_EDHVMIGCcQ0pQJegQIExAB&biw=767&bih=826&dpr=1.25",
+  "url": "https://i.scdn.co/image/ab67616d0000b273b29c360d8dd3b7e694aa283e"
+},
+{
+    konu: "Gezici eski askeri polis Jack Reacher suçları çözer ve kendi sokak adaletini uygular. Lee Child'ın romanlarından uyarlanmıştır.",
+    ad: "Jack Reacher",
+    tur: "Dizi",
+    puan: "7.5",
+    url:"https://resizing.flixster.com/KoaEcKTB3bonweOmn_EJOMCyuR0=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvYTBhNjY1MjAtYTNkZC00MGJhLThhOTgtZDBhN2ViMzEzZWZkLmpwZw==",
+    webURL: "https://www.google.com/search?q=jac+richer+izle&oq=jac+richer+izle&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDMzMTlqMGo5qAIEsAIB8QX8XLEPIxERyQ&sourceid=chrome&ie=UTF-8"
+  },
+{
+ konu: "Cehennem'deki aşırı nüfusu azaltmak için şiddet içermeyen bir alternatif bulma çabasıyla, Lucifer'in kızı, uyumsuz şeytanlardan oluşan bir gruba kendilerini kurtarma şansı sunan bir rehabilitasyon oteli açar.",
+ ad: "Hasbin Hotel",
+ tur: "Dizi",
+ puan: "7.7",
+ url: "https://images.justwatch.com/poster/311702583/s718/sezon-1.jpg",
+ webURL: "https://www.google.com/search?sca_esv=768393473445289f&sxsrf=AE3TifO9VAiwFMrRXDYMJ_c0KCX6_abjwg:1748359529033&q=hazbin+hotel+izle&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeiAkWG4OlBE2zyCTMjPbGmPgfe_7ak8LUsonpWCvT6w65kX8H6mRWnnD519MpbjPF8WRgd7YKfCo_79r0Eq9luN4TKGXMkXOa7EYLk-9JXZtRjA4g3DLf4QKNCCDwK7or_D7OOJFDW2rISy1wWqSRh3E9Op4zTgMTfnvgV2580fk-H-_IQ&sa=X&ved=2ahUKEwiUu6vl-sONAxUwBNsEHVGfLc0Q0pQJegQIEBAB&cshid=1748359547355134&biw=767&bih=826&dpr=1.25"
+},
+    {
+    url: "https://m.media-amazon.com/images/M/MV5BYjVmODJmMDYtZjU4MS00MWIxLTk1ZmQtZGRhZTM3ZDhjMTEwXkEyXkFqcGc@._V1_.jpg",
+    ad: "Disenchantment",
+    tur: "Dizi",
+    puan: "7.2",
+    konu: "Prenses Tiabeanie, 'Bean', Prens Merkimer ile yakın zamanda ayarlanan evliliğinden rahatsızdır. Sonra bir iblis olan Luci ve bir elf olan Elfo ile tanışır ve işler oldukça heyecanlı ve tehlikeli bir hal alır.",
+    webURL: "https://www.google.com/search?q=Disenchantment&oq=dis&gs_lcrp=EgZjaHJvbWUqEQgAEEUYJxg7GOMCGIAEGIoFMhEIABBFGCcYOxjjAhiABBiKBTIGCAEQRRg5MgwIAhAuGCcYgAQYigUyBwgDEAAYgAQyBggEEEUYPDIGCAUQRRg9MgYIBhBFGD0yBggHEAUYQNIBCDUyMzVqMGo5qAIAsAIA&sourceid=chrome&ie=UTF-8"
+  },
+    {
+    url: "https://m.media-amazon.com/images/M/MV5BZGQyZjk2MzMtMTcyNC00NGU3LTlmNjItNDExMWM4ZDFhYmQ2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    ad: "Rick and Morty",
+    tur: "Dizi",
+    puan: "9.1",
+    konu: "Nihilist bir çılgın bilim adamının ve endişeli torununun parçalanmış aile hayatları, boyutlar arası maceralarıyla daha da karmaşık bir hal alır.",
+    webURL: "https://www.google.com/search?q=Rick+and+Morty&oq=ri&gs_lcrp=EgZjaHJvbWUqDggCEEUYJxg7GIAEGIoFMgYIABBFGDkyBggBEEUYQDIOCAIQRRgnGDsYgAQYigUyDAgDEC4YQxiABBiKBTIMCAQQLhhDGIAEGIoFMgwIBRAuGEMYgAQYigUyBggGEEUYPTIGCAcQRRg80gEIMTIyMWowajmoAgSwAgHxBWdtESYtmHVs&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://m.media-amazon.com/images/M/MV5BZDRhYjZlOTEtMzYwMC00YmEzLTgxMzQtYTlhY2M3MjdhM2RlXkEyXkFqcGc@._V1_.jpg",
+    ad: "Squid Game",
+    tur: "Dizi",
+    puan: "8.0",
+    konu: "Yüzlerce nakit sıkıntısı çeken oyuncu, çocuk oyunlarında yarışmak için garip bir daveti kabul eder. İçeride, ölümcül yüksek bahislerle cazip bir ödül beklemektedir: 45,6 milyar wonluk devasa bir ödülün söz konusu olduğu bir hayatta kalma oyunu.",
+    webURL: "https://www.google.com/search?q=squid+game&sca_esv=5d5026adf4f3b04e&sxsrf=AE3TifPtrpirscu9lqLU0FBGsYk02suXzA%3A1748269742030&ei=rno0aLLNAaaRxc8Pk77m2Qo&oq=squid&gs_lp=Egxnd3Mtd2l6LXNlcnAiBXNxdWlkKgIIATIHECMYsAMYJzIKEAAYsAMY1gQYRzIKEAAYsAMY1gQYRzIKEAAYsAMY1gQYRzIKEAAYsAMY1gQYRzIKEAAYsAMY1gQYRzIKEAAYsAMY1gQYRzIKEAAYsAMY1gQYRzIKEAAYsAMY1gQYRzINEAAYgAQYsAMYQxiKBTINEAAYgAQYsAMYQxiKBTINEAAYgAQYsAMYQxiKBUjrDlAAWABwAXgBkAEAmAEAoAEAqgEAuAEByAEAmAIBoAIDmAMAiAYBkAYMkgcBMaAHALIHALgHAMIHAzAuMcgHAg&sclient=gws-wiz-serp"
+  },
+  {
+    url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRimEHbz4Blzqgcu0-qbS9jHLEKoeuxb7VwXg&s",
+    ad: "Better Call Saul",
+    tur: "Dizi",
+    puan: "9.0",
+    konu: "Ceza avukatı Jimmy McGill'in, Walter White ve Jesse Pinkman'la yaşadığı kader karşılaşmasına kadar geçen yıllarda yaşadığı sıkıntılar ve zorluklar.",
+    webURL:"https://www.google.com/search?q=better+call+saul&oq=better+call+saul+&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIGCAEQRRhAMgwIAhAuGCcYgAQYigUyDAgDEAAYQxiABBiKBTIMCAQQABhDGIAEGIoFMgwIBRAAGEMYgAQYigUyDAgGEAAYQxiABBiKBTIGCAcQRRg90gEIOTYzMGowajmoAgCwAgA&sourceid=chrome&ie=UTF-8" 
+
+  },
+  {
+    url: "https://m.media-amazon.com/images/M/MV5BMzU5ZGYzNmQtMTdhYy00OGRiLTg0NmQtYjVjNzliZTg1ZGE4XkEyXkFqcGc@._V1_.jpg",
+    ad: "Breaking Bad",
+    tur: "Dizi",
+    puan: "9.5",
+    konu: "Ameliyat edilemez akciğer kanseri teşhisi konulan kimya öğretmeni, ailesinin geleceğini güvence altına almak için eski bir öğrencisiyle birlikte metamfetamin üretip satmaya başlar.",
+    webURL:"https://www.google.com/search?q=better+call+saul&oq=better+call+saul+&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIGCAEQRRhAMgwIAhAuGCcYgAQYigUyDAgDEAAYQxiABBiKBTIMCAQQABhDGIAEGIoFMgwIBRAAGEMYgAQYigUyDAgGEAAYQxiABBiKBTIGCAcQRRg90gEIOTYzMGowajmoAgCwAgA&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p13923679_b_v8_aa.jpg",
+    ad: "Young Sheldon",
+    tur: "Dizi",
+    puan: "7.6",
+    konu: "Sheldon Cooper (The Big Bang Theory (2007) filminde yetişkin olarak görülen) adlı bir çocuk dahi ve ailesiyle tanışın. Sosyal açıdan engelli olan Sheldon, bazı benzersiz zorluklarla karşı karşıyadır.",
+    webURL:"https://www.google.com/search?gs_ssp=eJzj4tVP1zc0TEkrNC3Lzs41YPTircwvzUtXKM5IzUnJzwMAlGQKLw&q=young+sheldon&oq=young&gs_lcrp=EgZjaHJvbWUqDAgCEC4YQxiABBiKBTIHCAAQABiABDIKCAEQLhjUAhiABDIMCAIQLhhDGIAEGIoFMgYIAxBFGEAyDggEEEUYJxg7GIAEGIoFMgwIBRAAGEMYgAQYigUyDAgGEC4YQxiABBiKBTIMCAcQLhhDGIAEGIoF0gEINzUxMmowajmoAgCwAgA&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p185124_b_v8_aj.jpg",
+    ad: "How I Met Your Mother",
+    tur: "Dizi",
+    puan: "8.3",
+    konu: "Bir baba, çocuklarına anneleriyle tanışmalarına kadar geçen süreçte dört yakın arkadaşıyla birlikte yaşadıkları yolculuğu anlatıyor.",
+    webURL:"https://www.google.com/search?q=how+i+met+your+mother&oq=how+&gs_lcrp=EgZjaHJvbWUqBggBEEUYOzIGCAAQRRg5MgYIARBFGDsyBggCEEUYQDIMCAMQLhgnGIAEGIoFMgYIBBBFGDsyBggFEEUYPTIGCAYQRRg9MgYIBxBFGD3SAQg5NTQ4ajBqOagCALACAA&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p185554_b_v8_bk.jpg",
+    ad: "The Big Bang Theory",
+    tur: "Dizi",
+    puan: "8.1",
+    konu: "Başarılı sinema oyuncusu Penny, Pasadena'da zeki ama sosyal açıdan beceriksiz fizikçiler Sheldon Cooper ve Leonard Hofstadter'in karşısındaki daireye taşınır ve onlara laboratuvar dışındaki hayat hakkında ne kadar az şey bildiklerini gösterir.",
+    webURL: "https://www.google.com/search?gs_ssp=eJzj4tLP1TcwKjItLMk1YPTiT8pMV0hKzEtXKMlIzS-qBACCTwlq&q=big+bang+theory&oq=bing+ba&gs_lcrp=EgZjaHJvbWUqCQgDEC4YChiABDIGCAAQRRg5MgoIARAuGNQCGIAEMgYIAhBFGEAyCQgDEC4YChiABDIJCAQQABgKGIAEMgkIBRAAGAoYgAQyDwgGEC4YChjHARjRAxiABDIJCAcQABgKGIAE0gEJMTcwMjFqMGo5qAIAsAIA&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://resizing.flixster.com/TVgrgiNBcpuwS9S1Tmil7pVF1z0=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p185128_b_v8_ag.jpg",
+    ad: "Prison Break",
+    tur: "Dizi",
+    puan: "8.3",
+    konu: "Bir inşaat mühendisi, haksız yere suçlanan kardeşinin ölüm cezasına çarptırılmasını önlemek için, tasarımına yardımcı olduğu bir hapishaneye, içeriden kaçarak sığınır.",
+    webURL:"https://www.google.com/search?gs_ssp=eJzj4tTP1TcwS0mrMjRg9OIpKMoszs9TSCpKTcwGAGAqCAE&q=prison+break&oq=prsi&gs_lcrp=EgZjaHJvbWUqCQgBEC4YChiABDIGCAAQRRg5MgkIARAuGAoYgAQyCQgCEAAYChiABDIJCAMQLhgKGIAEMgkIBBAAGAoYgAQyCQgFEAAYChiABDIMCAYQLhgKGNQCGIAEMgYIBxBFGDzSAQgzMjY0ajBqOagCALACAA&sourceid=chrome&ie=UTF-8"
+  },
+  {
+  "ad": "İnvicible",
+  "tur": "Dizi",
+  "puan": "8.7",
+  "konu": "Gezegenin en güçlü süper kahramanı olan bir babanın hikayesini anlatan, Skybound/Image çizgi romanından uyarlanan yetişkinlere yönelik animasyon dizisi.",
+  "webURL": "https://www.google.com/search?q=invincible+izle&sca_esv=8f2d608cc335416a&sxsrf=AE3TifMlhktbHcNcBfFJf1WKC8JgOkvu5w%3A1748624125767&ei=_eI5aPDELqmIxc8PupHXyAU&ved=0ahUKEwiwt_K-1MuNAxUpRPEDHbrIFVkQ4dUDCBA&uact=5&oq=invincible+izle&gs_lp=Egxnd3Mtd2l6LXNlcnAaAhgCIg9pbnZpbmNpYmxlIGl6bGUyCBAAGIAEGMsBMggQABiABBjLAUjXDlDcBlirC3ABeAGQAQCYAecBoAHuBqoBBTAuNC4xuAEDyAEA-AEBmAIGoAL_BsICChAAGLADGNYEGEfCAg0QABiABBiwAxhDGIoFwgIQEAAYgAQYQxj4BRiKBRiLA8ICDRAAGIAEGEMYigUYiwPCAhYQLhiABBjwAxhDGKQDGKgDGIoFGIsDwgITEC4YgAQYQxioAxiKBRiLAxicA8ICChAAGIAEGEMYigXCAgsQABiABBiRAhiKBZgDAIgGAZAGDJIHBTEuNC4xoAeBE7IHBTAuNC4xuAf6BsIHBTAuNC4yyAcN&sclient=gws-wiz-serp",
+  "url": "https://www.hdfilmcehennemi.men/wp-content/uploads/2023/12/invincible-2021-izle.webp"
+},
+  {
+    url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3bYcTiqy1pFeGxkAljzkF20z4DyE4Q_gZdw&s",
+    ad: "Lost in Space",
+    tur: "Dizi",
+    puan: "7.3",
+    konu: "Yabancı bir gezegene zorunlu iniş yapan Robinson ailesi, hayatta kalmak ve kaçmak için tüm zorluklara karşı mücadele eder; ancak gizli tehlikelerle çevrilidirler.",
+    webURL:"https://www.google.com/search?q=lost+in+space+izle&sca_esv=5d5026adf4f3b04e&sxsrf=AE3TifO1lwd5QLQIFMc9P1LsUliz2yvZMA%3A1748270017040&ei=wXs0aNaRApGsxc8PnIuqgQc&ved=0ahUKEwiW9tiqrcGNAxURVvEDHZyFKnAQ4dUDCBA&uact=5&oq=lost+in+space+izle&gs_lp=Egxnd3Mtd2l6LXNlcnAiEmxvc3QgaW4gc3BhY2UgaXpsZTIIEAAYgAQYywEyCBAAGIAEGMsBMggQABiABBjLATIIEAAYFhgKGB4yBhAAGBYYHjIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeMgYQABgWGB5IwhBQpgVY6AxwAXgBkAEAmAGmAaABhQaqAQMwLjW4AQPIAQD4AQGYAgagApkGwgIHECMYsAMYJ8ICChAAGLADGNYEGEfCAg0QABiABBiwAxhDGIoFwgIKECMYgAQYJxiKBcICChAAGIAEGEMYigXCAgoQLhiABBhDGIoFwgIKEAAYgAQYFBiHAsICBRAAGIAEwgIFEC4YgASYAwCIBgGQBgySBwMxLjWgB4QnsgcDMC41uAeWBsIHBTAuMy4zyAcR&sclient=gws-wiz-serp"
+  },
+  {
+  "ad": "The Boys",
+  "tur": "Dizi",
+  "puan": "8.7",
+  "konu": "Bir grup kanunsuz, süper güçlerini kötüye kullanan yozlaşmış süper kahramanları alt etmek için yola çıkar.",
+  "webURL": "https://www.google.com/search?q=the+boys+izle&sca_esv=151be9a0a91a555a&sxsrf=AE3TifOaoRo7f2q_zB_zAXN-zKFaqp-evw%3A1748624293607&ei=peM5aMvkJLGJxc8PwOLuwQY&ved=0ahUKEwiLy_aO1cuNAxWxRPEDHUCxO2gQ4dUDCBA&uact=5&oq=the+boys+izle&gs_lp=Egxnd3Mtd2l6LXNlcnAaAhgCIg10aGUgYm95cyBpemxlMggQABiABBjLATIIEAAYgAQYywFIxg5Q9AZYvQxwAHgCkAEAmAHWAaAB-QaqAQUwLjMuMrgBA8gBAPgBAZgCBqACnwfCAgQQABhHwgIQEAAYgAQYQxj4BRiKBRiLA8ICDRAAGIAEGEMYigUYiwPCAhMQLhiABBhDGKgDGIoFGIsDGO4FwgILEC4YgAQYkQIYigXCAggQLhiABBjLAcICCxAuGIAEGNQCGMsBmAMAiAYBkAYIkgcFMS4zLjKgB50tsgcFMC4zLjK4B5oHwgcJMC4zLjIuMC4xyAci&sclient=gws-wiz-serp",
+  "url": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRYxan0RVMaKr1JxY2uZlvhPqhqU-KIGXbYpU_LW1HG3-f9-RpYQlOPok90hExi-L3cvRuE"
+},
+  {
+    url: "https://preview.redd.it/murder-drones-is-officially-streaming-on-prime-video-v0-qdlvrq9o7a1f1.jpg?width=640&crop=smart&auto=webp&s=9a752eba6f084c8e16f4d0021b21f4cc0f8d4509",
+    ad: "Murder Drone",
+    tur: "Dizi",
+    puan: "7.8",
+    konu: "Kıyamet sonrası bir dış gezegende, işçi dronlar, Katil Dronlar adı verilen haydut robotlardan saklanarak hayatta kalma mücadelesi veriyor.",
+    webURL:"https://www.google.com/search?q=murder+drones+izle&sca_esv=5d5026adf4f3b04e&sxsrf=AE3TifMdxYGQLgTRx9IEF0JmFTcFAN34Tw%3A1748270067373&ei=83s0aPTJFruPxc8PxePIqQw&ved=0ahUKEwi0j9nCrcGNAxW7R_EDHcUxMsUQ4dUDCBA&uact=5&oq=murder+drones+izle&gs_lp=Egxnd3Mtd2l6LXNlcnAiEm11cmRlciBkcm9uZXMgaXpsZTIIEAAYgAQYywEyCBAAGIAEGMsBMggQABiABBjLATIIEAAYFhgKGB4yBhAAGBYYHjIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeMgYQABgWGB5I_BZQ_w1YgRNwAXgBkAEAmAGiAaABhwaqAQMwLjW4AQPIAQD4AQGYAgagAqIGwgIKEAAYsAMY1gQYR8ICDRAAGIAEGLADGEMYigXCAgoQABiABBhDGIoFwgIKEC4YgAQYQxiKBcICCxAAGIAEGJECGIoFwgIFEAAYgATCAgcQLhiABBgKwgIHEAAYgAQYCpgDAIgGAZAGDJIHAzEuNaAHgCqyBwMwLjW4B58GwgcFMC4yLjTIBxg&sclient=gws-wiz-serp"
+  },
+  {
+    url: "https://m.media-amazon.com/images/M/MV5BZmZhY2ViYzYtMTQ0NS00NDcyLWIxZTYtMGUyODE0NDA0NmNkXkEyXkFqcGc@._V1_.jpg",
+    ad: "Lost",
+    tur: "Dizi",
+    puan: "8.3",
+    konu: "Bir uçak kazasından kurtulanlar, görünüşte ıssız bir tropik adada hayatta kalabilmek için birlikte çalışmak zorunda kalırlar.",
+    webURL:"https://www.google.com/search?q=lost+izle&oq=lost+izle&gs_lcrp=EgZjaHJvbWUyCQgAEEUYORiABDIHCAEQABiABDIHCAIQABiABDIHCAMQABiABDIHCAQQABiABDIHCAUQABiABDIHCAYQABiABDINCAcQABiGAxiABBiKBTINCAgQABiGAxiABBiKBTIHCAkQABiPAtIBCDIyMzlqMGo5qAIEsAIB8QVFevi9i02TQA&sourceid=chrome&ie=UTF-8"
+  },
+  {
+    url: "https://m.media-amazon.com/images/M/MV5BYWZjYmU3ZjYtYzdjYy00OTRkLWI3YTgtNzdlOGI5ZDUxMDkzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    ad: "Fairfax",
+    tur: "Dizi",
+    puan: "5.4",
+    konu: "Los Angeles'ın Fairfax Caddesi'nde şöhret arayışında olan dört ortaokul arkadaşının hikayesini konu alan animasyon dizisi.",
+    webURL: "https://www.google.com/search?q=fairfax+amazon&sca_esv=ca6a2bedbd114e2c&sxsrf=AE3TifNSFLmwBqSDanhWq9o_L2FnjaeZMw%3A1748199637700&ei=1WgzaJ3AKseGxc8P4pKU6QQ&gs_ssp=eJzj4tVP1zc0LEquqKw0LSgxYPTiS0vMLEpLrFBIzE2sys8DAKIBCqc&oq=fairfax&gs_lp=Egxnd3Mtd2l6LXNlcnAiB2ZhaXJmYXgqAggAMgoQLhiABBgnGIoFMgoQLhiABBhDGIoFMggQABiABBjLATIIEC4YgAQYywEyCBAAGIAEGMsBMggQABiABBjLATIFEAAYgAQyBRAAGIAEMggQABiABBjLATIOEC4YgAQY0QMYxwEYywFIrBxQAFjfE3ABeAGQAQSYAcIDoAGPHaoBCTAuMi40LjQuMrgBAcgBAPgBAZgCCaAC7RGoAgrCAgoQIxiABBgnGIoFwgIKEAAYgAQYQxiKBcICBxAjGCcY6gLCAgcQLhgnGOoCwgIQEC4YgAQY0QMYxwEYJxiKBcICEBAuGIAEGNEDGEMYxwEYigXCAgwQABiABBhDGIoFGArCAgUQLhiABMICCxAuGIAEGJECGIoFwgILEAAYgAQYkQIYigXCAggQLhiABBjUAsICDRAuGIAEGEMY1AIYigXCAgoQABiABBgKGMsBwgIXEC4YgAQYxwEYmAUYmQUYywEYngUYrwHCAgcQABiABBgKmAME8QX74dkqJhrYzZIHCTEuMi4zLjIuMaAHnNYBsgcJMC4yLjMuMi4xuAfpEcIHBzAuMi42LjHIByQ&sclient=gws-wiz-serp",
+    webURL:"https://www.google.com/search?q=fairfax+izle&oq=fairfax+izle&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIKCAEQABiABBiiBDIHCAIQABjvBTIHCAMQABjvBTIHCAQQABjvBdIBCDk2ODJqMGo5qAIEsAIB8QVLALEqbP1rxw&sourceid=chrome&ie=UTF-8"
+  },
+];
+
+    var aktifGosterim = "tum"; // "tum", "film", "dizi"
+
+    function kutuOlustur(veri) {
+      var kutu = document.createElement("div");
+      kutu.className = "kutucuk";
+
+      var sol = document.createElement("div");
+      sol.className = "sol";
+      var img = document.createElement("img");
+      img.src = veri.url;
+      sol.appendChild(img);
+
+      var ad = document.createElement("div");
+      ad.className = "ad";
+      ad.textContent = veri.ad;
+      sol.appendChild(ad);
+
+      var sag = document.createElement("div");
+      sag.className = "sag";
+      var tur = document.createElement("div");
+      tur.className = "ozellik";
+      tur.innerHTML = "<span>Tür:</span> " + (veri.tur || "");
+      var puan = document.createElement("div");
+      puan.className = "ozellik";
+      puan.innerHTML = "<span>IMDb Puanı:</span> " + (veri.puan || "") + "/10";
+      var konu = document.createElement("div");
+      konu.className = "ozellik";
+      konu.innerHTML = "<span>Konu:</span> " + (veri.konu || "");
+      sag.appendChild(tur);
+      sag.appendChild(puan);
+      sag.appendChild(konu);
+
+      kutu.appendChild(sol);
+      kutu.appendChild(sag);
+
+      // Çift tıklamada webURL aç
+      kutu.ondblclick = function() {
+        if (veri.webURL && veri.webURL.trim() !== "") {
+          let url = veri.webURL.trim();
+          if (!url.match(/^https?:\/\//)) url = "http://" + url;
+          window.open(url, "_blank");
+        }
+      };
+
+      return kutu;
+    }
+
+    function filtreliGoster() {
+      var arama = document.getElementById("AramaCubugu").value.trim().toLowerCase();
+      var filmDiv = document.getElementById("Film");
+      var diziDiv = document.getElementById("Dizi");
+      filmDiv.innerHTML = "";
+      diziDiv.innerHTML = "";
+
+      if (aktifGosterim === "tum" || aktifGosterim === "film") {
+        filmler.forEach(function(film) {
+          if (film.ad.toLowerCase().includes(arama)) {
+            filmDiv.appendChild(kutuOlustur(film));
+          }
+        });
+      }
+      if (aktifGosterim === "tum" || aktifGosterim === "dizi") {
+        diziler.forEach(function(dizi) {
+          if (dizi.ad.toLowerCase().includes(arama)) {
+            diziDiv.appendChild(kutuOlustur(dizi));
+          }
+        });
+      }
+
+      // Görünürlük ayarı
+      filmDiv.style.display = (aktifGosterim === "tum" || aktifGosterim === "film") ? "grid" : "none";
+      diziDiv.style.display = (aktifGosterim === "tum" || aktifGosterim === "dizi") ? "grid" : "none";
+    }
+
+    function FilmGöster() {
+      aktifGosterim = "film";
+      filtreliGoster();
+    }
+
+    function DiziGöster() {
+      aktifGosterim = "dizi";
+      filtreliGoster();
+    }
+
+    document.getElementById("AramaCubugu").addEventListener("input", function() {
+      filtreliGoster();
+    });
+
+    // Sayfa ilk açıldığında tüm kutuları göster
+    window.onload = function() {
+      aktifGosterim = "tum";
+      filtreliGoster();
+    };
+  </script>
+
+</body>
+</html>

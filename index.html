@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VisualSpace Yetki Kontrol</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #121212;
+      color: #eee;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .login-container {
+      background-color: #1e1e1e;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+      width: 320px;
+      text-align: center;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+    }
+    h2 {
+      margin-bottom: 24px;
+      color: #bb86fc;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      border: 1.5px solid #333;
+      background-color: #292929;
+      color: #eee;
+      font-size: 16px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input[type="text"]:focus, input[type="password"]:focus {
+      outline: none;
+      border-color: #bb86fc;
+      box-shadow: 0 0 8px #bb86fc;
+      background-color: #1f1f1f;
+    }
+    button {
+      width: 100%;
+      padding: 12px 0;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      font-weight: 600;
+      background: linear-gradient(270deg, #bb86fc, #3700b3, #bb86fc);
+      background-size: 600% 600%;
+      animation: gradientAnimation 16s ease infinite;
+      transition: background-position 0.4s ease-in-out;
+      font-weight: bold;
+    }
+    button:hover {
+      animation-play-state: paused;
+      background-position: 100% 50%;
+    }
+    @keyframes gradientAnimation {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+    label {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #aaa;
+      min-height: 18px;
+    }
+    canvas#matrix {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.7s ease;
+    }
+    canvas#matrix.fade-out {
+      opacity: 0;
+    }
+    canvas#matrix.fade-in {
+      opacity: 1 !important;
+      transition: opacity 1.2s ease;
+    }
+    .welcome-box {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.7);
+      background: #121212;
+      color: #0F0;
+      border-radius: 18px;
+      padding: 40px 60px;
+      min-width: 320px;
+      min-height: 120px;
+      opacity: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      transition: opacity 0.7s, transform 0.7s cubic-bezier(.68,-0.55,.27,1.55), min-width 0.5s, min-height 0.5s, padding 0.5s;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .welcome-box.active {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.1);
+      pointer-events: auto;
+    }
+    .welcome-box.closing {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.5);
+      min-width: 0px;
+      min-height: 0px;
+      padding: 0px;
+      transition: opacity 0.5s, transform 0.5s, min-width 0.5s, min-height 0.5s, padding 0.5s;
+    }
+    .welcome-message span {
+      opacity: 0;
+      display: inline-block;
+      color: #0F0;
+      animation: fadeInLetter 0.18s forwards;
+    }
+    @keyframes fadeInLetter {
+      to { opacity: 1; }
+    }
+    .welcome-role {
+      margin-top: 18px;
+      font-size: 20px;
+      color: #0F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      opacity: 0;
+      transition: opacity 0.7s;
+    }
+    .welcome-role.active {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+
+  <div class="login-container" id="loginPanel">
+    <h2>Yetki Girişi</h2>
+    <input type="text" id="YetkiTipi" placeholder="Yetki Tipinizi Girin" />
+    <label id="kullaniciAdi"></label>
+    <input type="password" id="Sifre" placeholder="Yetki Şifresini Girin" />
+    <label id="kullaniciSifre"></label>
+    <button id="girisBtn">Giriş</button>
+  </div>
+
+  <div class="welcome-box" id="welcomeBox" style="display:none;">
+    <div class="welcome-message" id="welcomeMessage"></div>
+    <div class="welcome-role" id="welcomeRole"></div>
+  </div>
+
+  <script>
+    // MATRIX ANİMASYONU
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const letters = 'アァイィウヴエェオカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロワヲン';
+    const katakana = letters.split('');
+
+    const fontSize = 16;
+    let columns = Math.floor(canvas.width / fontSize);
+
+    // Daha az sütun kullanalım (yoğunluğu azaltmak için)
+    let activeColumnIndices = [];
+    function setupMatrix() {
+      columns = Math.floor(canvas.width / fontSize);
+      activeColumnIndices = [];
+      for (let i = 0; i < columns; i++) {
+        if (Math.random() < 0.5) {
+          activeColumnIndices.push(i);
+        }
+      }
+      drops = {};
+      dropsChar = {};
+      activeColumnIndices.forEach(i => {
+        drops[i] = Math.floor(Math.random() * -50);
+        dropsChar[i] = katakana[Math.floor(Math.random() * katakana.length)];
+      });
+    }
+
+    let drops = {};
+    let dropsChar = {};
+    let frameCount = 0;
+    const charChangeSpeed = 2; // Harflerin değişme hızı
+    const rainSpeed = 0.6;     // Satırların düşme hızı
+
+    setupMatrix();
+    window.addEventListener('resize', setupMatrix);
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#0F0';
+      ctx.font = fontSize + 'px monospace';
+
+      frameCount++;
+      activeColumnIndices.forEach(i => {
+        // Harf değişim hızı ve akış eşit
+        if (frameCount % charChangeSpeed === 0) {
+          dropsChar[i] = katakana[Math.floor(Math.random() * katakana.length)];
+        }
+        ctx.fillText(dropsChar[i], i * fontSize, drops[i] * fontSize);
+
+        // Eğer ekran dışına çıktıysa bazen başa sar
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i] += 0.6;
+      });
+      requestAnimationFrame(draw);
+    }
+
+    requestAnimationFrame(draw);
+
+    // 4 saniye sonra matrix animasyonunu opaklaştırarak kapat
+    setTimeout(() => {
+      canvas.classList.add('fade-out');
+      setTimeout(() => {
+        document.getElementById('loginPanel').style.opacity = 1;
+      }, 700);
+    }, 4000);
+
+    // Matrix tekrar başlatıcı (animasyon durmaz, sadece opaklık)
+    function fadeInMatrix(callback) {
+      canvas.classList.remove('fade-out');
+      canvas.classList.add('fade-in');
+      setTimeout(() => {
+        if (callback) callback();
+      }, 1200);
+    }
+
+    // Harf harf yazı animasyonu
+    function typeWriter(text, element, delay = 70, callback) {
+      element.innerHTML = '';
+      for (let i = 0; i < text.length; i++) {
+        let span = document.createElement('span');
+        span.textContent = text[i];
+        span.style.animationDelay = (i * delay / 1000) + 's';
+        element.appendChild(span);
+      }
+      setTimeout(() => {
+        if (callback) callback();
+      }, text.length * delay + 300);
+    }
+
+    // Harf harf silme animasyonu
+    function typeDelete(element, delay = 50, callback) {
+      const spans = Array.from(element.querySelectorAll('span'));
+      let i = spans.length - 1;
+      function erase() {
+        if (i >= 0) {
+          spans[i].style.opacity = 0;
+          i--;
+          setTimeout(erase, delay);
+        } else if (callback) {
+          callback();
+        }
+      }
+      erase();
+    }
+
+    // Hoşgeldin kutusu animasyonu
+    function showWelcome(yetki) {
+      const welcomeBox = document.getElementById('welcomeBox');
+      const welcomeMessage = document.getElementById('welcomeMessage');
+      const welcomeRole = document.getElementById('welcomeRole');
+      welcomeBox.style.display = 'flex';
+      setTimeout(() => {
+        welcomeBox.classList.add('active');
+        typeWriter("Matrix'e Hoşgeldin", welcomeMessage, 70, function() {
+          welcomeRole.textContent = yetki;
+          welcomeRole.classList.add('active');
+          setTimeout(() => {
+            // Yazıları tek tek sil
+            typeDelete(welcomeMessage, 40, function() {
+              typeDelete(welcomeRole, 40, function() {
+                // Kutu küçülüp yok olsun
+                welcomeBox.classList.remove('active');
+                welcomeBox.classList.add('closing');
+                setTimeout(() => {
+                  welcomeBox.style.display = 'none';
+                  // Yönlendirme
+                  if (yetki === "Admin") {
+                    window.location.href = "AdminPanel.html";
+                  } else {
+                    window.location.href = "UserPanel.html";
+                  }
+                }, 600);
+              });
+            });
+          }, 1200);
+        });
+      }, 100);
+    }
+
+    // Giriş kontrol ve animasyonlar
+    function Kontrol() {
+      var yetkiler = ["Admin", "Burak", "Edanur","Irmak","Yusuf","Enes","Abdulkadir","Zeynep","User1881"];
+      var sifreler = ["314159", "Karageçi", "Kılıç","Karageçi","Kaya","Çiçekli","Kılınç","Çelikten","1938"];
+      var kullanici = document.getElementById("YetkiTipi").value;
+      var sifre = document.getElementById("Sifre").value;
+      var index = yetkiler.indexOf(kullanici);
+
+      if (index !== -1 && sifreler[index] === sifre) {
+        document.getElementById('loginPanel').style.opacity = 0;
+        setTimeout(() => {
+          fadeInMatrix(() => {
+            showWelcome(kullanici);
+          });
+        }, 700);
+      } else {
+        alert("Hatalı kullanıcı adı veya şifre!");
+      }
+    }
+
+    // Giriş butonu ve enter tuşu
+    document.getElementById('girisBtn').addEventListener('click', Kontrol);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === "Enter" && document.getElementById('loginPanel').style.opacity == "1") {
+        Kontrol();
+      }
+    });
+  </script>
+</body>
+</html>
